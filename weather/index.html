@@ -52,7 +52,7 @@
 			
 			$.ajax({
 				type : "GET",
-				url  : "http://wthrcdn.etouch.cn/weather_mini?city=广州",
+				url  : "https://wthrcdn.etouch.cn/weather_mini?city=广州",
 				dataType : 'jsonp',
 				success : function(data){
 					$('#today').html(today+'  '+data.data.city +' ('+data.data.wendu+'℃)');
