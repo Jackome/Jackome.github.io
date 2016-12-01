@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>雪花</title>
+		<style type="text/css">
+			#canvas{
+				border: 2px dashed cornsilk;
+				background: black;
+			}
+			body,html{margin: 0;padding: 0;}
+			canvas{margin: 0;padding: 0;}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" max-width="960" max-height="1000"></canvas>
+
+		Particle 			构造函数
+		Particle.prototype  原型
+		p 		实例
+		particles  	储存所有粒子实例对象的数组
+		
+		步凑：
+			1. canvas.width = canvas.width ; 清空画布
+			
+			2. particle.draw();  绘制例子
+			3. particle.update();  更新例子
+			4. particle.kill();   清除例子
+		
+	
+	</body>
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+	
+//	window.onresize = function(e){
+		var width = window.innerWidth || document.documentElement.clientWidth;
+		var height = window.innerHeight || document.documentElement.clientHeight;
+		
+		canvas.width = width;
+		canvas.height = height;
+//	}
+		
+	
+	/*
+	 	求随机整数
+	 	@param {Number} min 最小值
+	 	@param {Number} min 最小值
+	 	
+	 	@return 
+	 	
+	 
+	 * */
+	function rnd(min,max){
+		return parseFloat(Math.random()*(max-min)+min);
+//		return parseInt(Math.random()*(max-min)+min);
+	}
+		
+	function Particle(){
+//		this.x = rnd(0,canvas.width);
+		this.x =( width/2);   // 开始的坐标。。。。。。。
+		this.y = height/2;
+		this.radius = rnd(14,35);  // 半径
+		this.speed = {x: rnd(-4,5), y: rnd(-5,4)};  // 移动速度.........
+								//  控制速度 有两种方法：   1.是直接 设置 值；
+							//  2.是在函数动画调用是 用 tick++; (tick % 20==0)才调用一次 
+//		this.speed = {
+//			x: function(){
+//				var i = 0;
+//				i++;
+//				if(i>6){i =0;} 
+//				console.log(i)
+//				return i;				
+//			},
+//			y:rnd(-5,4)
+//		}
+//		console.log(this.speed.x)
+
+//		this.color = '#fff';
+var red = parseInt(rnd(0,255));
+var green = parseInt(rnd(0,255));
+var blue = parseInt(rnd(0,255));
+
+		this.color = 'rgb('+ red+','+green+','+blue+')';	
+		this.opacity =0.3;		
+	}
+	
+	Particle.prototype.draw = function(){
+		// 粒子绘制
+		ctx.save();
+		ctx.fillStyle = this.color;
+		ctx.beginPath();
+		ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+		ctx.fill();
+		ctx.restore();
+		
+		this.update(); // 粒子绘制完 根新坐标
+	
+	}
+	
+	Particle.prototype.update = function(){
+		// 跟新粒子的坐标
+		this.y += this.speed.y;
+		this.x += this.speed.x;
+	};
+	
+	var particles = [];  // 存储多个实例 的数组。。。。	
+//	var p = new Particle();	 // 创建一个粒子的 实例
+
+//	Particle.prototype.kill = function(){
+//		ctx.clearRect(this.x,this.y,this.radius,this.radius);
+//		particles.length -=1;
+//	}
+
+
+	function snow (){
+		
+		canvas.width = canvas.width;  // 两种清除画布的方法 都可以 （宽和 高）
+//		canvas.height = canvas.height; 
+
+		if(particles.length <150){	//  如果不加这个 判断，每执行一次动画就会创建一个实例
+			particles.push(new Particle());  // 生成100 个粒子对象，并装到数组里面
+		}
+		
+//		p.draw();
+	//  绘制particles 中所有的 粒子实例------------
+		
+		for(var i in particles){			//  遍历数组里 所有的例子
+
+			var particle = particles[i];
+			var _this = particle;
+			var op = 0.4;	// 撞墙后的透明度减少
+			var slow = 1.5;  // 撞墙后减速
+			var restart = 1;   // 速度达到后 初始化。。
+			
+//			if(particles[i].y > canvas.height || particles[i].y <0 || particles[i].x <0 ||particles[i].x > canvas.width){		
+			if(particle.y + _this.radius >= canvas.height || particle.y <=0 ){	
+				
+					_this.speed.y *=-1;
+					_this.opacity -= 0.5;
+//					console.log(this)   //---- this 指向window,  _this指particle实例
+//					console.log(_this.opacity)
+
+					if(_this.speed.y>0){ _this.speed.y -= slow}; // 减速。。。。
+					if(_this.speed.y<0){ _this.speed.y += slow}	;
+			};
+			
+			if( particle.x + _this.radius >= canvas.width || particle.x <=0){
+				
+					_this.speed.x *=-1;
+					_this.opacity -= 0.5;
+					// 改变方向后，减速。。。。。。。
+					if(_this.speed.x>0){ _this.speed.x -= slow}
+					if(_this.speed.x<0){ _this.speed.x += slow}
+			};
+			
+			//  判断粒子 的速度。。。。。
+//			console.log(particle.speed.x)
+			var X = Math.abs(_this.speed.x);
+			var Y = Math.abs(_this.speed.y);
+			if(Y <=restart || X <= restart){
+//			if(Y <=restart && X <= restart){
+//				console.log(1)
+				particles[i] = new Particle();	// 将原来的粒子重新 再赋值，初始化。	
+			};
+			
+//			particle.draw();
+			particles[i].draw();
+		}
+		
+		requestAnimationFrame(snow); // 递归 -- 
+	}
+	requestAnimationFrame(snow);
+	
+	
+	
+	</script>
+</html>
