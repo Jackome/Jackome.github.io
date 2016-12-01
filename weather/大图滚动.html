@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style>
+			*{
+				list-style: none;
+				padding: 0; margin: 0;
+			}
+			.poster-main{
+				margin: auto;
+			}
+		</style>
+		<script src="zepto.min.js"></script>
+		<script src="zepto_fx.js"></script>
+		<script src="zepto_touch.js"></script>
+		<script src="zepto_poster.js"></script>
+	</head>
+	<body>
+		<div class="poster-main" data-setting='{
+												 "width" : "70%",
+												 "height": "auto"
+											   }'>
+			<ul class="poster-list">
+				<li class="poster-item"><a href="###"><img src="img/1.jpg" alt="" /></a></li>
+				<li class="poster-item"><a href="###"><img src="img/4.jpg" alt="" /></a></li>
+				<li class="poster-item"><a href="###"><img src="img/5.jpg" alt="" /></a></li>
+				<li class="poster-item"><a href="###"><img src="img/7.jpg" alt="" /></a></li>
+				<li class="poster-item"><a href="###"><img src="img/9.jpg" alt="" /></a></li>
+			</ul>
+		</div>
+	</body>
+	<script>
+		$(function(){
+			$('.poster-main').poster({
+				960 : '100%'
+			});
+		});
+	</script>
+</html>
