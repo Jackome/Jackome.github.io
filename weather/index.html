@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{padding: 0; margin: 0;}
+			#wrap{
+				padding: 10px;
+				border: 5px solid #bbb;
+				display: inline-block;
+				width: 908px;
+			}
+			.rols{
+				text-align: center;
+				display: inline-block;
+				padding: 20px;
+				border: 1px dotted #ccc;
+			}
+			p,h1{
+				padding: 20px;
+			}
+			.now{
+				font-weight: 700;
+				letter-spacing: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<h1 id="today"></h1>
+			<div class="rols now"></div>
+			<div class="rols"></div>
+			<div class="rols"></div>
+			<div class="rols"></div>
+			<div class="rols"></div>
+			<p id="ganmao"></p>
+		</div>
+	</body>
+	<script src="jquery-3.1.0.min.js"></script>
+	<script>
+		$(function(){
+			var date = new Date();
+			var week = ['周日','周一','周二','周三','周四','周五','周六'];
+			var month = date.getMonth()+1;
+			month = month<10? '0'+month: month;
+			var day = date.getDate();
+			day = day<10? '0'+day : day;
+			var today = week[date.getDay()]+' '+month+'月'+day+'日';
+			
+			var $div = $('.rols');
+			
+			$.ajax({
+				type : "GET",
+				url  : "https://wthrcdn.etouch.cn/weather_mini?city=广州",
+				dataType : 'jsonp',
+				success : function(data){
+					$('#today').html(today+'  '+data.data.city +' ('+data.data.wendu+'℃)');
+					var fore = data.data.forecast;
+					for(var i=0; i<5; i++){
+						var obj = fore[i];
+						var str = '<p>'+obj.date+'</p>'+
+								'<p>'+obj.fengli+'</p>'+
+								'<p>'+obj.fengxiang+'</p>'+
+								'<p>'+obj.low.slice(3)+'~'+obj.high.slice(3)+'</p>'+
+								'<p>'+obj.type+'</p>'
+						$div.eq(i).html(str);
+					}
+					$('#ganmao').html(data.data.ganmao);
+				},
+				error : function(error){
+					console.log(error);
+				}
+			});
+		});
+	</script>
+</html>

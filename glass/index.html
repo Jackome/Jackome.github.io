@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				width: 2500px;
+			}
+			.a1,.a2,.a3,.a4{
+				position: absolute;
+				top: 0; bottom: 0;
+				margin: auto;
+			}
+			.a1{
+				left: 100px;
+				top: 320px;
+			}
+			.a3{
+				left: 700px;
+				top: -500px;
+			}
+			.a2{
+				left: 1200px;
+				top: 320px;
+			}
+			
+			.a4{
+				top: -500px;
+				left: 1200px;
+			}
+		</style>
+	</head>
+	<body>
+		<img class="a1" src="img/min.jpg" srct="img/max.jpg"/>
+		<img class="a2" src="img/min.jpg" srct="img/max.jpg"/>
+		<img class="a3" src="img/0.jpg"/>
+		<img class="a4" src="img/min.jpg"/>
+		<br />
+
+	</body>
+	<script src="jquery-3.1.0.min.js"></script>
+	<script src="magnifying.js"></script>
+	<script>
+		$('.a1').magnify({
+			position: 'top',
+			minWidth: 500
+		});
+		
+		$('.a2').magnify();
+		
+		$('.a3').magnify({
+			position: 'bottom',
+			divWidth: 200
+		})
+		
+		$('.a4').magnify({
+			position: 'left',
+			maxWidth: 500
+		})
+	</script>
+</html>
